@@ -1,10 +1,20 @@
 ; ************************************************************************************************
 ; SanTe_V1 (Sanquin Tecan)
 ;
-; For making joblist.twl files for EVoware use from manually inpuutted samplenames 
+; For making joblist.twl files for EVoware use from manually scanned barcodes/samplenames
 ; OR from scan.csv file in EVOware outputfolder
 ;
-; by Dion Methorst 
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+; by Dion Methorst
 ; Version 0.1 March 2012
 ; Version 0.5 May 2013
 ; Version 1.0 SanTe_V1.exe 17-02-2014
@@ -15,7 +25,7 @@
 ; ini file read ?
 ; TPLASC combi function ?
 ; FTP function ?
-; 
+;
 ; ************************************************************************************************
 ; start of script:
 
@@ -46,9 +56,9 @@ main()
 
 ; ************************************************************************************************
 Func main()
-   
+
 ;_Ini() ;Func initialise, setting the stage
-   
+
 	  Opt("GUICoordMode", 1)
 	  Opt("GUIResizeMode", 1)
 	  Opt("GUIOnEventMode", 1)
@@ -56,7 +66,7 @@ Func main()
 	  Local $icofile = "C:\apps\EVO\setup\Ontw Sanq.ico"
 	  $font = "calibri"
 
-Global const $SanTe = GuiCreate("SanTe for Joblist TPL & ASC files", 375, 400)
+Global const $SanTe = GuiCreate("SanTe for Joblist TPL & ASC files", 395, 400)
    ;DllCall("user32.dll", "int", "AnimateWindow", "hwnd", $Sante, "int", 1000, "long", 0x00080000) ; fade-in
    GuiSetIcon($icofile, 0)
    GUICtrlSetDefColor(0x0000AB) ;blue
@@ -68,15 +78,15 @@ Global const $SanTe = GuiCreate("SanTe for Joblist TPL & ASC files", 375, 400)
    GUISetOnEvent($GUI_EVENT_RESTORE, "SpecialEvents")
 
 ;Write Barcodes
-   GUICtrlCreateGroup("Joblist Barcode",20,11,340,133)
-   $Barcode = GUICtrlCreateEdit("scan barcodes" & @CRLF & "or use Joblist scan.csv",30,31,319,100)
+   GUICtrlCreateGroup("Joblist Barcode",20,11,355,133)
+   $Barcode = GUICtrlCreateEdit("scan barcodes" & @CRLF & "or use Joblist scan.csv",30,31,334,100)
    GUICtrlCreateGroup("",-99,-99,1,1)
 
 ; radiobutton menu
-   GUICtrlCreateGroup("Assay",20,180,165,210)
+   GUICtrlCreateGroup("Assay",20,170,165,220)
    Global Const $Bep1		= GUICtrlCreateRadio("aC1inh  (WL788)",30,195,120,15)
    GUICtrlSetOnEvent(-1, "_Bep")
-   Global Const $Bep2		= GUICtrlCreateRadio("C1inh Prdkt  (WL751)",30,220,120,15)
+   Global Const $Bep2		= GUICtrlCreateRadio("aBSA  (WL789)",30,220,120,15)
    GUICtrlSetOnEvent(-1, "_Bep")
    Global Const $Bep3	 	= GUICtrlCreateRadio("C1inh conc  (WL841)",30,245,120,15)
    GUICtrlSetOnEvent(-1, "_Bep")
@@ -86,35 +96,35 @@ Global const $SanTe = GuiCreate("SanTe for Joblist TPL & ASC files", 375, 400)
    GUICtrlSetOnEvent(-1, "_Bep")
    Global Const $Bep6		= GUICtrlCreateRadio("MBL  (WL675)",30,320,120,15)
    GUICtrlSetOnEvent(-1, "_Bep")
-   Global Const $Bep7		= GUICtrlCreateRadio("VWfAg  (WIP)",30,345,120,15)
-   GUICtrlSetOnEvent(-1, "_Bep")
+   ;Global Const $Bep7		= GUICtrlCreateRadio("aBSA  (WL789)",30,345,120,15)
+  ; GUICtrlSetOnEvent(-1, "_Bep")
    Global Const $Bep8		= GUICtrlCreateRadio("Free Offset  ",30,370,120,15)
    GUICtrlSetOnEvent(-1, "_Bep")
    ;GUICtrlSetState($Bep5, $GUI_CHECKED)
    GUICtrlCreateGroup("",-99,-99,1,1)
-   
+
 ; V dilutions menu
-   GUICtrlCreateGroup("Dilution",195,180,165,55)
+   GUICtrlCreateGroup("Dilution",195,170,180,65)
    Global Const $V1 = GUICtrlCreateCheckbox("V1",205,205,30,15)
    GUICtrlSetOnEvent(-1, "_V1")
    Global Const $V2	= GUICtrlCreateCheckbox("V2",245,205,30,15)
    GUICtrlSetOnEvent(-1, "_V2")
    Global Const $V3 = GUICtrlCreateCheckbox("V3",285,205,30,15)
    GUICtrlSetOnEvent(-1, "_V3")
-   Global Const $V4	= GUICtrlCreateCheckbox("V4",325,205,30,15)
-   GUICtrlSetOnEvent(-1, "_V4")
+   Global Const $V4	= GUICtrlCreateCheckbox("1Eml",325,205,45,15)
+   GUICtrlSetOnEvent(-1, "_1Eml")
    GUICtrlCreateGroup("",-99,-99,1,1)
 
 ; MenuButtons
-   $MakeJoblist = GUICtrlCreateButton("Joblist Barcode",195,245,165,25)
+   $MakeJoblist = GUICtrlCreateButton("Joblist Barcode",195,245,180,25)
    GUICtrlSetOnEvent(-1, "WriteBC")
-   $ReadBarcode = GUICtrlCreateButton("Joblist scan.csv",195,275,165,25)
+   $ReadBarcode = GUICtrlCreateButton("Joblist scan.csv",195,275,180,25)
    GUICtrlSetOnEvent(-1, "Make_Bjob")
    ;$TPLASC = GUICtrlCreateButton("TPL && ASC",195,305,165,25)
    ; GUICtrlSetOnEvent(-1, "_TPLASC")
    ;$HelpMenu = GUICtrlCreateButton("Need Help?",195,335,165,25)
    ;GUICtrlSetOnEvent(-1, "Help_Call")
-   $ExitButton = GUICtrlCreateButton("Exit",195,305,165,25)
+   $ExitButton = GUICtrlCreateButton("Exit",195,305,180,25)
    GUICtrlSetOnEvent(-1, "Xsit")
 	;$protocol = GUICtrlCreateInput("",30,370,140,20)
 	;$SaveButton = GUICtrlCreateButton("Save Settings",195,285,165,25)
@@ -132,7 +142,7 @@ EndFunc ; EndFunc Main()
 Func _Ini()
 ; work in progress.... just an idea
   ; Local $icofile = IniRead("C:\apps\EVO\setup\SanTe.ini", "GUI", "icon", "NotFound")
-   
+
 
 Endfunc
 ;-------------------------------------------------------------------------------------------------
@@ -156,8 +166,8 @@ Func _Bep()
 			$LIMS = "11"
 		case BitAnd(GUICtrlRead($Bep6),$GUI_CHECKED);GuiCtrlRead($Bep6) = $GUI_CHECKED
 			$LIMS = "12"
-		case BitAnd(GUICtrlRead($Bep7),$GUI_CHECKED);GuiCtrlRead($Bep7) = $GUI_CHECKED
-			$LIMS = "103"
+		;case BitAnd(GUICtrlRead($Bep7),$GUI_CHECKED);GuiCtrlRead($Bep7) = $GUI_CHECKED
+		;	$LIMS = "26"
 		Case BitAnd(GUICtrlRead($Bep8),$GUI_CHECKED);GuiCtrlRead($Bep8) = $GUI_CHECKED
 			$LIMS = inputbox("Tecan LIMS-number input", "Enter your Tecan EVO LIMS-number:" , "99","","400","220") ;_
 			   ;& @CRLF & @CRLF & "IgA = 11, MBL = 12, C1inh = .." _
@@ -175,7 +185,7 @@ Func _V1() ;(Const ByRef $V1)
         $Xfactor1 = ""
     EndIf
  EndFunc ;dilution checkboxes
- 
+
 Func _V2();(Const ByRef $V2)
     If GUICtrlRead($V2) = $GUI_CHECKED Then
        $Xfactor2 = "V2"
@@ -183,7 +193,7 @@ Func _V2();(Const ByRef $V2)
         $Xfactor2 = ""
     EndIf
  EndFunc ;dilution checkboxes
- 
+
 Func _V3();(Const ByRef $V3)
     If GUICtrlRead($V3) = $GUI_CHECKED Then
        $Xfactor3 = "V3"
@@ -191,29 +201,29 @@ Func _V3();(Const ByRef $V3)
         $Xfactor3 = ""
     EndIf
  EndFunc ;dilution checkboxes
- 
-Func _V4();(Const ByRef $V4)
+
+Func _1Eml();(Const ByRef $V4)
     If GUICtrlRead($V4) = $GUI_CHECKED Then
-       $Xfactor4 = "V4"
+       $Xfactor4 = "1Eml"
     ElseIf GUICtrlRead($V4) = $GUI_UNCHECKED Then
         $Xfactor4 = ""
     EndIf
 EndFunc ;dilution checkboxes
 
-Func  WriteBC()    
-	  
+Func  WriteBC()
+
 ;MsgBox(0, "Barcode input", GUICtrlRead($Barcode)) ; display the selected listbox entry
 local $FolderPath = "C:\apps\EVO\CSV\"
 ;local $FolderPath = "C:\Program Files\Tecan\EVOware\output\"
 local $FileNam2 = "SanTeBC.csv"
 local $BCcsv = $FolderPath & $FileNam2
-Local $FileOpen = FileOpen($BCcsv, 2) ; write mode 2 = overwrite, 1 = append
+Local $FileOpen = FileOpen($BCcsv, 2 + 8) ; write mode 2 = overwrite, 1 = append
 FileWrite($FileOpen, GUICtrlRead($Barcode))
-	  
+
 If FileExists($BCcsv) Then
    local $JOB2 = FileOpen("C:\apps\EVO\JOB\" & "joblist.twl", 2 + 8)
 Else
-MsgBox(4096, $BCcsv, "Scan.csv does NOT exist in folder:" & @CRLF & @CRLF & "C:\apps\EVO\CSV")
+MsgBox(4096, $BCcsv, "SanTeBC.csv does NOT exist in folder:" & @CRLF & @CRLF & "C:\apps\EVO\CSV")
 EndIf
 
 Local $CountLines2 = _FileCountLines($BCcsv)
@@ -231,16 +241,16 @@ For $Writ2 = 1 To Ubound($BCarray)-1 ;Ubound($Names)-2
 				If	$Xfactor1 = "V1" 	Then FileWriteline($JOB2, "O;" & $LIMS & ";1;" & $Xfactor1 & ";1;1.0"  & @CRLF)
 				If	$Xfactor2 = "V2" 	Then FileWriteline($JOB2, "O;" & $LIMS & ";1;" & $Xfactor2 & ";1;1.0"  & @CRLF)
 				If	$Xfactor3 = "V3" 	Then FileWriteline($JOB2, "O;" & $LIMS & ";1;" & $Xfactor3 & ";1;1.0"  & @CRLF)
-				If	$Xfactor4 = "V4" 	Then FileWriteline($JOB2, "O;" & $LIMS & ";1;" & $Xfactor4 & ";1;1.0"  & @CRLF)
+				If	$Xfactor4 = "1Eml" 	Then FileWriteline($JOB2, "O;" & $LIMS & ";1;" & $Xfactor4 & ";1;1.0"  & @CRLF)
 
-Next 
+Next
 
 FileWriteLine($JOB2, "L;" & @CRLF)
 
 fileclose($JOB2)
 Fileclose($BCcsv)
 MsgBox(4096, "Joblist", "Joblist.twl in" & @CRLF & "C:\APPS\EVO\JOB\", 3)
-	  
+
 EndFunc ;joblist from scanned barcodes
 
 Func Make_Bjob()
@@ -250,8 +260,8 @@ Func Make_Bjob()
 ;			   & @CRLF & @CRLF & "aC1inh = 25, aBSA = 26, CETOR= 27" _
 ;			   & @CRLF & @CRLF & "of gebruik <CTRL H>, zoek en vervang functie", "99","","400","220")
 
-;local $FolderPath = "C:\Program Files\Tecan\EVOware\output\"
-local $FolderPath = "C:\APPS\EVO\CSV\"
+local $FolderPath = "C:\Program Files\Tecan\EVOware\output\"
+;local $FolderPath = "C:\APPS\EVO\CSV\"
 local $FileName = "scan.csv"
 local $var = $FolderPath & $FileName
 Local $CountLines = _FileCountLines($var)
@@ -284,7 +294,7 @@ For $Write = 1 To Ubound($Names)-2
 				If	$Xfactor4 = "V4" 	Then FileWriteline($JOB, "O;" & $LIMS & ";1;" & $Xfactor4 & ";1;1.0"  & @CRLF)
 
 			EndSelect
-Next 
+Next
 
 FileWriteLine($JOB, "L;" & @CRLF)
 
@@ -380,7 +390,7 @@ Func _ParseCSV($sFile, $sDelimiters=';', $sQuote='"', $iFormat=0)
 	ReDim $aResult[$iIndex][$iSubBound]
 	Return $aResult
  EndFunc ; End function Parse CSV
- 
+
 Func Bool(Const ByRef $checkbox)
     If GUICtrlRead($checkbox) = $GUI_CHECKED Then
         Return 1
@@ -388,10 +398,3 @@ Func Bool(Const ByRef $checkbox)
         Return 0
     EndIf
 EndFunc
-
-
-
-
-
-
-
